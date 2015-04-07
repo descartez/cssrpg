@@ -24,8 +24,10 @@ body {
   width: 25px;
   height: 25px;
   background: #274D00;
+  text-align: center;
   margin-left: auto;
   margin-right: auto;
+  box-shadow: none;
 }
 
 #start-button:hover {
