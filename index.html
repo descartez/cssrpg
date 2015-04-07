@@ -1,16 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link rel="stylesheet" href="main.css">
-    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-    <script src="main.js"></script>
-    <title>CSSRPG</title>
-  </head>
-  <body>
-    <div id='title'>
+<head>
+  <link rel="stylesheet" href="main.css">
+  <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+  <script src="main.js"></script>
+  <title>CSSRPG</title>
+</head>
+<body>
+  <div id='view'>
+    <ul id='health-bar'>
+      <li class='health-points'></li>
+      <li class='health-points'></li>
+      <li class='health-points'></li>
+      <li class='health-points'></li>
+      <li class='health-points'></li>
+      <li class='health-points'></li>
+    </ul>
+    <div class='message' id='title'>
       <h1>CSS RPG</h1>
       <p>You walk a path through a field.</p>
       <p>Hit any key to progress. Hit any key twice to beat away the Red.</p>
     </div>
-  </body>
+    <div class='message' id='dead'>
+      <h1>YOU DIED</h1>
+      <p>They will sing songs of your glory.</p>
+      <p>Your bones will enrich the soil.</p>
+    </div>
+  </div>
+</body>
 </html>
