@@ -9,31 +9,53 @@ GameView.prototype.changeBackground = function(color) {
   $('body').css('background-color', color);
 }
 
-GameView.prototype.fadeTitle = function() {
+GameView.prototype.fadeTitleOut = function() {
   $('#title').fadeOut('slow');
 }
 
-GameView.prototype.showDeath = function() {
+GameView.prototype.fadeTitleIn = function() {
+  $('#title').fadeIn('fast');
+}
+
+GameView.prototype.fadeDeathIn = function() {
   $('#dead').fadeIn();
+}
+
+GameView.prototype.fadeDeathOut = function() {
+  $('#dead').fadeOut();
+}
+
+GameView.prototype.addHealth = function() {
+  $('#health-bar li').append("<li class='health-points'></li>")
 }
 
 GameView.prototype.decreaseHealthBar = function() {
   console.log('You lost health!')
-    // $('#health-bar').effect('shake');
+    $('#health-bar').effect("pulsate", {times:2}, 200);
     $('#health-bar li:last').remove()
   }
+
+// GameView.prototype.resetGameView = function() {
+//   this.fadeTitleIn();
+//   this.fadeDeathOut();
+//   this.addHealth();
+//   this.addHealth();
+//   this.addHealth();
+//   this.addHealth();
+//   this.addHealth();
+//   this.addHealth();
+
+// }
 // ----MODELS--------------------------------------------
 
 
 // >>>GAMEBOARD
 function GameBoard(){};
 
-GameBoard.prototype.spaces = function(spaces) {
-  this.spaces = spaces
-};
+GameBoard.prototype.spaces = [];
 
 GameBoard.prototype.traverseBoard = function() {
-
+  this.currentBoard = this.spaces.shift();
 };
 
 
@@ -64,6 +86,13 @@ GameController.prototype.init = function(view){
   this.gameStart = false;
   }
 
+GameController.prototype.resetGame = function() {
+  console.log('wat')
+  this.view.resetGameView();
+  console.log('more wat')
+  this.player.health = 6
+  this.gameStart = false
+}
 
 // ----INITIALIZING----------------------------------------
   view = new GameView;
@@ -72,7 +101,7 @@ GameController.prototype.init = function(view){
 
   $(document).on("keyup", function() {
     if (game.gameStart === false){
-      game.view.fadeTitle();
+      game.view.fadeTitleOut();
       game.view.changeBackground('#274D00');
       game.gameStart = true
       console.log('game has started')
@@ -80,11 +109,16 @@ GameController.prototype.init = function(view){
       if (game.player.checkIfAlive(game.player.health) === true){
         game.view.decreaseHealthBar();
         game.player.health -= 1;
-        console.log(game.player.health)
+        console.log(game.player.health);
       }else if (game.player.checkIfAlive(game.player.health) === false){
-        console.log('ye died')
-        game.view.showDeath();
+        console.log('ye died');
+        game.view.fadeDeathIn();
       }
     }
+  // $('#reset').on('click', function(e) {
+  //     e.preventDefault();
+  //     console.log('reseting...');
+  //     game.resetGame();
+  // })
   });
 })
