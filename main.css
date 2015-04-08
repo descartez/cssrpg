@@ -1,5 +1,4 @@
 body {
-  background-color: #90BF60;
   color: white;
   font-variant: small-caps;
 }
@@ -27,24 +26,14 @@ p {
   display: none;
 }
 
+#victory {
+  display: none;
+}
+
 .message {
   text-align: center;
   width: 100%;
   padding-top: 5%;
-}
-
-#start-button {
-  width: 25px;
-  height: 25px;
-  background: #274D00;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: none;
-}
-
-#start-button:hover {
-  background-color: #C0E699;
 }
 
 #health-bar {
@@ -81,4 +70,24 @@ p {
   position: absolute;
   top: 10px;
   width: 25px;
+}
+
+#start-screen {
+  background-color: #90BF60;
+}
+
+#path-one {
+  background-color: #274D00;
+}
+
+#path-two {
+  background-color: #437313;
+}
+
+#path-three {
+  background-color: #90BF60;
+}
+
+#death {
+  background-color: black;
 }

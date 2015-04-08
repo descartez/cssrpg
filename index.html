@@ -8,7 +8,7 @@
   <script src="main.js"></script>
   <title>CSSRPG</title>
 </head>
-<body>
+<body id='start-screen'>
   <div id='view'>
     <ul id='health-bar'>
       <li id='health-icon'></li>
@@ -21,13 +21,19 @@
     </ul>
     <div class='message' id='title'>
       <h1>CSS RPG</h1>
-      <p>You walk a path through a field.</p>
+      <p>You walk a path through a field at night.</p>
       <p>Hit any key to progress. Hit any key twice to beat away the Red.</p>
     </div>
     <div class='message' id='dead'>
       <h1>YOU DIED</h1>
       <p>They will sing songs of your glory.</p>
       <p>Your bones will enrich the soil.</p>
+      <p>Refresh to play again.</p>
+    </div>
+    <div class='message' id='victory'>
+      <h1>YOU WON</h1>
+      <p>You reached the edge of the field.</p>
+      <p>A new sun rises above the horizon.</p>
       <p>Refresh to play again.</p>
     </div>
   </div>

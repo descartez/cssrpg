@@ -9,6 +9,10 @@ GameView.prototype.changeBackground = function(color) {
   $('body').css('background-color', color);
 }
 
+GameView.prototype.changeBackgroundById = function(id) {
+  $('body').attr('id', id);
+}
+
 GameView.prototype.fadeTitleOut = function() {
   $('#title').fadeOut('slow');
 }
@@ -19,6 +23,7 @@ GameView.prototype.fadeTitleIn = function() {
 
 GameView.prototype.fadeDeathIn = function() {
   $('#dead').fadeIn();
+  this.changeBackground('#20173E');
 }
 
 GameView.prototype.fadeDeathOut = function() {
@@ -74,6 +79,23 @@ Player.prototype.checkIfAlive = function(health) {
   }
 }
 
+Player.prototype.takeDamage = function(damage) {
+
+}
+
+// >>>ENEMY
+
+function Enemy(){}
+
+Enemy.prototype.health = 5
+
+Enemy.prototype.attackPlayer = function(damage) {
+
+}
+
+Enemy.prototype.takeDamage = function(damage) {
+
+}
 // ----CONTROLLER----------------------------------------
 
 function GameController(){}
@@ -86,13 +108,14 @@ GameController.prototype.init = function(view){
   this.gameStart = false;
   }
 
-GameController.prototype.resetGame = function() {
-  console.log('wat')
-  this.view.resetGameView();
-  console.log('more wat')
-  this.player.health = 6
-  this.gameStart = false
-}
+// Got caught in a recursive loop until page crash. Whay?
+// GameController.prototype.resetGame = function() {
+//   console.log('wat')
+//   this.view.resetGameView();
+//   console.log('more wat')
+//   this.player.health = 6
+//   this.gameStart = false
+// }
 
 // ----INITIALIZING----------------------------------------
   view = new GameView;
@@ -102,11 +125,12 @@ GameController.prototype.resetGame = function() {
   $(document).on("keyup", function() {
     if (game.gameStart === false){
       game.view.fadeTitleOut();
-      game.view.changeBackground('#274D00');
+      game.view.changeBackgroundById('path-one');
       game.gameStart = true
       console.log('game has started')
     }else{
       if (game.player.checkIfAlive(game.player.health) === true){
+        game.view.changeBackgroundById('path-three')
         game.view.decreaseHealthBar();
         game.player.health -= 1;
         console.log(game.player.health);
