@@ -71,6 +71,11 @@ GameSpace.prototype.setDistance = function() {
     this.distance = Math.floor((Math.random() * 5) + 1);
 }
 
+GameSpace.prototype.setColor = function() {
+  idArray = ['path-one','path-two','path-three']
+  this.color = idArray[Math.floor(Math.random() * 3)]
+}
+
 // >>>PLAYER
 function Player(){};
 
@@ -84,24 +89,24 @@ Player.prototype.checkIfAlive = function(health) {
     console.log('player is still alive');
     return true;
   }
-}
+};
 
 Player.prototype.takeDamage = function(damage) {
-
-}
+  this.health -= damage;
+};
 
 // >>>ENEMY
 
-function Enemy(){}
+function Enemy(){};
 
-Enemy.prototype.health = 5
+Enemy.prototype.health = 5;
 
-Enemy.prototype.attackPlayer = function(damage) {
-
+Enemy.prototype.attackPlayer = function(player, damage) {
+  player.health -= damage;
 }
 
 Enemy.prototype.takeDamage = function(damage) {
-
+  this.health -= damage;
 }
 // ----CONTROLLER----------------------------------------
 
