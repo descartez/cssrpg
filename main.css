@@ -1,17 +1,19 @@
 body {
-  background-color: #90BF60;
   color: white;
   font-variant: small-caps;
 }
 
-#title h1 {
+h1 {
   opacity: 0.8;
   font-size: 4em;
 }
 
-#title p {
+p {
   opacity: 0.7;
   font-size: 2em;
+  text-align: center;
+  width: 100%;
+  padding-top: 2%;
 }
 
 #title {
@@ -20,18 +22,72 @@ body {
   padding-top: 5%;
 }
 
-#start-button {
+#dead {
+  display: none;
+}
+
+#victory {
+  display: none;
+}
+
+.message {
+  text-align: center;
+  width: 100%;
+  padding-top: 5%;
+}
+
+#health-bar {
+  width: 100%;
+}
+
+#health-bar li{
+  display: inline-block;
+  font-size: 2em;
+}
+
+.health-points {
+  text-align: center;
   width: 25px;
   height: 25px;
-  background: #274D00;
-  margin-left: auto;
-  margin-right: auto;
+  background: #478E75;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  margin-left: 15px
 }
 
-#start-button:hover {
-  background-color: #C0E699;
+#health-icon {
+  background: #72AB97;
+  height: 25px;
+  position: relative;
+  width: 5px;
+}
+#health-icon:after {
+  background: #72AB97;
+  content: "";
+  height: 5px;
+  left: -10px;
+  position: absolute;
+  top: 10px;
+  width: 25px;
 }
 
-.rotate:hover {
+#start-screen {
+  background-color: #90BF60;
+}
 
+#path-one {
+  background-color: #274D00;
+}
+
+#path-two {
+  background-color: #437313;
+}
+
+#path-three {
+  background-color: #90BF60;
+}
+
+#death {
+  background-color: black;
 }
