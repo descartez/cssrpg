@@ -63,6 +63,13 @@ GameBoard.prototype.traverseBoard = function() {
   this.currentBoard = this.spaces.shift();
 };
 
+// >>>SPACE
+
+function GameSpace(){};
+
+GameSpace.prototype.setDistance = function() {
+    this.distance = Math.floor((Math.random() * 5) + 1);
+}
 
 // >>>PLAYER
 function Player(){};
@@ -120,6 +127,7 @@ GameController.prototype.init = function(view){
 // ----INITIALIZING----------------------------------------
   view = new GameView;
   game = new GameController;
+  space = new GameSpace
   game.init(view);
 
   $(document).on("keyup", function() {
