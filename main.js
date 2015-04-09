@@ -9,7 +9,7 @@ GameView.prototype.changeBackground = function(color) {
   $('body').css('background-color', color);
 }
 
-GameView.prototype.changeBackgroundById = function(id) {
+GameView.prototype.changeBackgroundViaId = function(id) {
   $('body').attr('id', id);
 }
 
@@ -36,9 +36,26 @@ GameView.prototype.addHealth = function() {
 
 GameView.prototype.decreaseHealthBar = function() {
   console.log('You lost health!')
-    $('#health-bar').effect("pulsate", {times:2}, 200);
-    $('#health-bar li:last').remove()
+  $('#health-bar').effect("pulsate", {times:2}, 200);
+  $('#health-bar li:last').remove();
+}
+
+GameView.prototype.damageEnemy = function(health) {
+  var colorArray = ['#731616', '#3C0303', 'black']
+  if (health >= 5) {
+    $('#enemy-sprite').effect("pulsate", {times:2}, 200);
+  }else if (health >= 3) {
+    $('#enemy-sprite').effect("pulsate", {times:2}, 200);
+    $('#enemy-sprite').changeBackground(colorArray[0]);
+  }else if (health >= 1) {
+    $('#enemy-sprite').effect("pulsate", {times:2}, 200);
+    $('#enemy-sprite').changeBackground(colorArray[1]);
+  }else if (health >= 0){
+    $('#enemy-sprite').effect("pulsate", {times:2}, 200);
+    $('#enemy-sprite').changeBackground(colorArray[3]);
   }
+}
+
 
 // GameView.prototype.resetGameView = function() {
 //   this.fadeTitleIn();
@@ -53,22 +70,12 @@ GameView.prototype.decreaseHealthBar = function() {
 // }
 // ----MODELS--------------------------------------------
 
-
-// >>>GAMEBOARD
-function GameBoard(){};
-
-GameBoard.prototype.spaces = [];
-
-GameBoard.prototype.traverseBoard = function() {
-  this.currentBoard = this.spaces.shift();
-};
-
 // >>>SPACE
 
 function GameSpace(){};
 
 GameSpace.prototype.setDistance = function() {
-    this.distance = Math.floor((Math.random() * 5) + 1);
+  this.distance = Math.floor((Math.random() * 5) + 1);
 }
 
 GameSpace.prototype.setColor = function() {
@@ -101,12 +108,16 @@ function Enemy(){};
 
 Enemy.prototype.health = 5;
 
-Enemy.prototype.attackPlayer = function(player, damage) {
-  player.health -= damage;
+Enemy.prototype.attackPlayer = function(target) {
+  target.health -= 1;
 }
 
-Enemy.prototype.takeDamage = function(damage) {
-  this.health -= damage;
+Enemy.prototype.takeDamage = function() {
+  if (this.health > 0) {
+    this.health -= Math.floor((Math.random() * 2) + 1);
+  }else if (this.health <= 0) {
+    this.health = 0
+  }
 }
 // ----CONTROLLER----------------------------------------
 
@@ -115,11 +126,28 @@ function GameController(){}
 GameController.prototype.init = function(view){
   console.log("Game has been init'ed")
   this.view = view;
-  // this.model = model;
+  this.board = [];
   this.player = new Player;
   this.gameStart = false;
-  }
+}
 
+GameController.prototype.playerTakesDamage = function() {
+  this.view.decreaseHealthBar();
+  this.player.takeDamage(1);
+}
+
+GameController.prototype.enemyTakesDamage = function(target) {
+  target.takeDamage();
+}
+
+GameController.prototype.traverseBoard = function() {
+  this.currentSpace = board.shift()
+  checkCurrentSpace(this.currentSpace)
+}
+
+GameController.prototype.checkCurrentSpace = function() {
+
+}
 // Got caught in a recursive loop until page crash. Whay?
 // GameController.prototype.resetGame = function() {
 //   console.log('wat')
@@ -129,33 +157,50 @@ GameController.prototype.init = function(view){
 //   this.gameStart = false
 // }
 
-// ----INITIALIZING----------------------------------------
-  view = new GameView;
-  game = new GameController;
-  space = new GameSpace
-  game.init(view);
+// GAME CYCLE PSEUDOCODE
+// 1. grabs current space
+//    a. if normal space, next keyup traverseBoard()
+//    b. if enemy, run battle cycle
+// 2. battle cycle
+//    a. make enemy visible
+//    b. start countdown
+//      i. every x secs, playerTakesDamage(), checkIfAlive()
+//      ii. every keyup, enemyTakesDamage(), checkIfAlive()
+//    c. if player dies || enemy dies
+//      i. if player dies, showGameOver()
+//      ii. if enemy dies, showVictory(), traverseBoard()
+// 3. checkIfEnd()
+//    a. if end, showWinState()
 
-  $(document).on("keyup", function() {
-    if (game.gameStart === false){
-      game.view.fadeTitleOut();
-      game.view.changeBackgroundById('path-one');
-      game.gameStart = true
-      console.log('game has started')
-    }else{
-      if (game.player.checkIfAlive(game.player.health) === true){
-        game.view.changeBackgroundById('path-three')
-        game.view.decreaseHealthBar();
-        game.player.health -= 1;
-        console.log(game.player.health);
-      }else if (game.player.checkIfAlive(game.player.health) === false){
-        console.log('ye died');
-        game.view.fadeDeathIn();
-      }
+// ----INITIALIZING----------------------------------------
+view = new GameView;
+game = new GameController;
+space = new GameSpace
+enemy = new Enemy
+game.init(view);
+
+$(document).on("keyup", function() {
+  if (game.gameStart === false){
+    game.view.fadeTitleOut();
+    game.view.changeBackgroundViaId('path-one');
+    game.gameStart = true
+    console.log('game has started')
+  }else{
+    if (game.player.checkIfAlive(game.player.health) === true){
+      game.view.changeBackgroundViaId('path-three')
+      game.playerTakesDamage();
+      game.enemyTakesDamage(enemy)
+      game.view.damageEnemy();
+      console.log(game.player.health);
+    }else if (game.player.checkIfAlive(game.player.health) === false){
+      console.log('ye died');
+      game.view.fadeDeathIn();
     }
+  }
   // $('#reset').on('click', function(e) {
   //     e.preventDefault();
   //     console.log('reseting...');
   //     game.resetGame();
   // })
-  });
+});
 })
