@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
 
 // ----VIEW----------------------------------------------
@@ -41,19 +40,23 @@ GameView.prototype.decreaseHealthBar = function() {
 }
 
 GameView.prototype.damageEnemy = function(health) {
-  var colorArray = ['#731616', '#3C0303', 'black']
+  var colors = ['#731616', '#3C0303', 'black'];
   if (health >= 5) {
     $('#enemy-sprite').effect("pulsate", {times:2}, 200);
   }else if (health >= 3) {
     $('#enemy-sprite').effect("pulsate", {times:2}, 200);
-    $('#enemy-sprite').changeBackground(colorArray[0]);
+    $('#enemy-sprite').css('background', colors[0]);
   }else if (health >= 1) {
     $('#enemy-sprite').effect("pulsate", {times:2}, 200);
-    $('#enemy-sprite').changeBackground(colorArray[1]);
+    $('#enemy-sprite').css('background', colors[1]);
   }else if (health >= 0){
-    $('#enemy-sprite').effect("pulsate", {times:2}, 200);
-    $('#enemy-sprite').changeBackground(colorArray[3]);
+    $('#enemy-sprite').effect("explode", {times:2}, 200);
+    $('#enemy-sprite').css('background', colors[2]);
   }
+
+  // GameView.prototype.showEnemy = function() {
+    // $('#enemy-sprite').fadeIn('fast');
+  // }
 }
 
 
@@ -119,15 +122,25 @@ Enemy.prototype.takeDamage = function() {
     this.health = 0
   }
 }
+
+Enemy.prototype.checkIfAlive = function(health) {
+  if (health <= 0) {
+    console.log('enemy is dead');
+    return false;
+  }else{
+    console.log('enemy is still alive');
+    return true;
+  }
+};
 // ----CONTROLLER----------------------------------------
 
 function GameController(){}
 
-GameController.prototype.init = function(view){
+GameController.prototype.init = function(){
   console.log("Game has been init'ed")
-  this.view = view;
   this.board = [];
   this.player = new Player;
+  this.view = new GameView;
   this.gameStart = false;
 }
 
@@ -137,25 +150,27 @@ GameController.prototype.playerTakesDamage = function() {
 }
 
 GameController.prototype.enemyTakesDamage = function(target) {
+  console.log(target)
   target.takeDamage();
+  this.view.damageEnemy(target.health);
 }
 
 GameController.prototype.traverseBoard = function() {
   this.currentSpace = board.shift()
-  checkCurrentSpace(this.currentSpace)
 }
 
 GameController.prototype.checkCurrentSpace = function() {
-
+  console.log('is it an enemy?')
+  if (this.currentSpace instanceof Enemy) {
+    console.log('yes it is an enemy')
+    // this.view.showEnemy();
+    // this.runCombat();
+  } else {
+    console.log('no it is not an enemy')
+    this.view.changeBackgroundViaId(this.currentSpace.color);
+    this.traverseBoard();
+  }
 }
-// Got caught in a recursive loop until page crash. Whay?
-// GameController.prototype.resetGame = function() {
-//   console.log('wat')
-//   this.view.resetGameView();
-//   console.log('more wat')
-//   this.player.health = 6
-//   this.gameStart = false
-// }
 
 // GAME CYCLE PSEUDOCODE
 // 1. grabs current space
@@ -173,10 +188,9 @@ GameController.prototype.checkCurrentSpace = function() {
 //    a. if end, showWinState()
 
 // ----INITIALIZING----------------------------------------
-view = new GameView;
 game = new GameController;
-space = new GameSpace
-enemy = new Enemy
+space = new GameSpace;
+enemy = new Enemy;
 game.init(view);
 
 $(document).on("keyup", function() {
@@ -189,7 +203,7 @@ $(document).on("keyup", function() {
     if (game.player.checkIfAlive(game.player.health) === true){
       game.view.changeBackgroundViaId('path-three')
       game.playerTakesDamage();
-      game.enemyTakesDamage(enemy)
+      game.enemyTakesDamage(enemy);
       game.view.damageEnemy();
       console.log(game.player.health);
     }else if (game.player.checkIfAlive(game.player.health) === false){
