@@ -54,32 +54,18 @@ GameView.prototype.damageEnemy = function(health) {
     $('#enemy-sprite').css('background', colors[2]);
   }
 
-  // GameView.prototype.showEnemy = function() {
-    // $('#enemy-sprite').fadeIn('fast');
-  // }
+  GameView.prototype.showEnemy = function() {
+    $('#enemy-sprite').fadeIn('fast');
+  }
+
+
 }
 
-
-// GameView.prototype.resetGameView = function() {
-//   this.fadeTitleIn();
-//   this.fadeDeathOut();
-//   this.addHealth();
-//   this.addHealth();
-//   this.addHealth();
-//   this.addHealth();
-//   this.addHealth();
-//   this.addHealth();
-
-// }
 // ----MODELS--------------------------------------------
 
 // >>>SPACE
 
 function GameSpace(){};
-
-GameSpace.prototype.setDistance = function() {
-  this.distance = Math.floor((Math.random() * 5) + 1);
-}
 
 GameSpace.prototype.setColor = function() {
   idArray = ['path-one','path-two','path-three']
@@ -138,7 +124,7 @@ function GameController(){}
 
 GameController.prototype.init = function(){
   console.log("Game has been init'ed")
-  this.board = [];
+  this.board = [new GameSpace, new GameSpace, new Enemy];
   this.player = new Player;
   this.view = new GameView;
   this.gameStart = false;
@@ -163,12 +149,22 @@ GameController.prototype.checkCurrentSpace = function() {
   console.log('is it an enemy?')
   if (this.currentSpace instanceof Enemy) {
     console.log('yes it is an enemy')
-    // this.view.showEnemy();
-    // this.runCombat();
+    this.view.showEnemy();
+    this.runCombat();
   } else {
     console.log('no it is not an enemy')
-    this.view.changeBackgroundViaId(this.currentSpace.color);
     this.traverseBoard();
+    this.currentSpace.setColor();
+    this.view.changeBackgroundViaId(this.currentSpace.color);
+  }
+}
+
+GameController.prototype.runCombat = function(enemy) {
+  while (this.currentSpace.checkIfAlive(this.currentSpace.health) === true) {
+    setInterval(this.playerTakesDamage(), 3000)
+    $(document).on("keyup", function() {
+      this.enemyTakesDamage(this.currentSpace);
+    })
   }
 }
 
@@ -201,11 +197,13 @@ $(document).on("keyup", function() {
     console.log('game has started')
   }else{
     if (game.player.checkIfAlive(game.player.health) === true){
-      game.view.changeBackgroundViaId('path-three')
-      game.playerTakesDamage();
-      game.enemyTakesDamage(enemy);
-      game.view.damageEnemy();
-      console.log(game.player.health);
+      game.traverseBoard();
+      game.checkCurrentSpace();
+      // game.view.changeBackgroundViaId('path-three')
+      // game.playerTakesDamage();
+      // game.enemyTakesDamage(enemy);
+      // game.view.damageEnemy();
+      // console.log(game.player.health);
     }else if (game.player.checkIfAlive(game.player.health) === false){
       console.log('ye died');
       game.view.fadeDeathIn();
