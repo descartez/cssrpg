@@ -58,7 +58,10 @@ GameView.prototype.damageEnemy = function(health) {
     $('#enemy-sprite').fadeIn('fast');
   }
 
-
+  GameView.prototype.showVictory = function() {
+    $('#victory').fadeIn();
+    this.changeBackground('#FF9F9F');
+  }
 }
 
 // ----MODELS--------------------------------------------
@@ -162,6 +165,7 @@ GameController.prototype.checkCurrentSpace = function() {
 GameController.prototype.runCombat = function(enemy) {
   while (this.currentSpace.checkIfAlive(this.currentSpace.health) === true) {
     setInterval(this.playerTakesDamage(), 3000)
+    // this.player.checkIfAlive();
     $(document).on("keyup", function() {
       this.enemyTakesDamage(this.currentSpace);
     })
