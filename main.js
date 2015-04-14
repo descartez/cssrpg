@@ -128,8 +128,14 @@ function GameController(){}
 GameController.prototype.init = function(){
   console.log("Game has been init'ed")
   this.board = [new GameSpace, new GameSpace, new Enemy];
+  console.log(this.board);
+
   this.player = new Player;
+  console.log(this.player);
+
   this.view = new GameView;
+  console.log(this.view);
+
   this.gameStart = false;
 }
 
@@ -145,27 +151,25 @@ GameController.prototype.enemyTakesDamage = function(target) {
 }
 
 GameController.prototype.traverseBoard = function() {
-  this.currentSpace = board.shift()
+  this.currentSpace = this.board.shift()
 }
 
 GameController.prototype.checkCurrentSpace = function() {
   console.log('is it an enemy?')
   if (this.currentSpace instanceof Enemy) {
     console.log('yes it is an enemy')
-    this.view.showEnemy();
+    // this.view.showEnemy();
     this.runCombat();
   } else {
     console.log('no it is not an enemy')
     this.traverseBoard();
-    this.currentSpace.setColor();
-    this.view.changeBackgroundViaId(this.currentSpace.color);
+    this.view.changeBackgroundViaId(this.currentSpace.setColor());
   }
 }
 
 GameController.prototype.runCombat = function(enemy) {
   while (this.currentSpace.checkIfAlive(this.currentSpace.health) === true) {
     setInterval(this.playerTakesDamage(), 3000)
-    // this.player.checkIfAlive();
     $(document).on("keyup", function() {
       this.enemyTakesDamage(this.currentSpace);
     })
@@ -191,7 +195,7 @@ GameController.prototype.runCombat = function(enemy) {
 game = new GameController;
 space = new GameSpace;
 enemy = new Enemy;
-game.init(view);
+game.init();
 
 $(document).on("keyup", function() {
   if (game.gameStart === false){
